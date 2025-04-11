@@ -1,0 +1,6 @@
+**/*.min.js
+**/plugins/
+/.temp/
+/docs/
+/docs_html/
+**/env.d.ts
