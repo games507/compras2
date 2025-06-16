@@ -6,7 +6,7 @@
 // Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
 // Supervisado por Dir. Joseph Arosemena
 
-include 'conexion.php'; // Incluir archivo de conexión
+include '../conexion.php'; // Incluir archivo de conexión
 
 // Recibir el parámetro 'id' (no_compra) de la URL
 $no_compra = $_GET['id'] ?? null;
@@ -172,36 +172,35 @@ $stmt_proponente->bind_param("i", $row['id']); // Suponiendo que 'id' es el camp
 $stmt_proponente->execute();
 $proponente_result = $stmt_proponente->get_result();
 ?>
-
+<h3 style="text-align: left;">Proponentes</h3>
 <?php if ($proponente_result && $proponente_result->num_rows > 0): ?>
     <div class="cont-portal">
-        <h3 style="text-align: left;">Proponentes</h3>
       	<div class="table-box-pc tb-pc-1">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Oferta</th>
-                    <th>Adjudicado</th>
-                    <th>Hora</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($proponente = $proponente_result->fetch_assoc()): ?>
-                    <tr class="row-color">
-                      	<?php
-                        	$p_oferta = number_format($proponente['oferta'], 2, '.', ',');
-                            $h_prop = date("h:i A", strtotime($proponente['hora']));
-                    	?>
-                        <td><?php echo htmlspecialchars($proponente['proponente']); ?></td>
-                        <td>B/. <?php echo htmlspecialchars($p_oferta); ?></td>
-                      <td><span class="badge-color"><?php echo htmlspecialchars($proponente['aprobado']); ?></span></td>
-                        <td><?php echo htmlspecialchars($h_prop); ?></td>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Oferta</th>
+                        <th>Adjudicado</th>
+                        <th>Hora</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-       </div>
+                </thead>
+                <tbody>
+                    <?php while ($proponente = $proponente_result->fetch_assoc()): ?>
+                        <tr class="row-color">
+                            <?php
+                                $p_oferta = number_format($proponente['oferta'], 2, '.', ',');
+                                $h_prop = date("h:i A", strtotime($proponente['hora']));
+                            ?>
+                            <td><?php echo htmlspecialchars($proponente['proponente']); ?></td>
+                            <td>B/. <?php echo htmlspecialchars($p_oferta); ?></td>
+                        <td><span class="badge-color"><?php echo htmlspecialchars($proponente['aprobado']); ?></span></td>
+                            <td><?php echo htmlspecialchars($h_prop); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 <?php else: ?>
     <p class="cont-portal">No se encontraron proponentes para esta compra.</p>
@@ -211,38 +210,38 @@ $proponente_result = $stmt_proponente->get_result();
     <!-- Documentos Relacionados -->
     <div class="cont-portal">
         <h3 style="text-align: left;">Documentos</h3>
+        <?php if ($docs_result && $docs_result->num_rows > 0): ?>
         <div class="table-box-pc tb-pc-1">
-            <?php if ($docs_result && $docs_result->num_rows > 0): ?>
-                <table>
-                    <thead>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Archivo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($doc = $docs_result->fetch_assoc()): 
+                        $fecha_mod = date("d-m-Y", strtotime($doc['date']));?>
                         <tr>
-                            <th></th>
-                            <th>Nombre</th>
-                            <th>Fecha</th>
-                            <th>Archivo</th>
+                            <td><i style="color: #00A9E0" class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
+                            <td><?php echo htmlspecialchars($doc['nombre']); ?></td>
+                            <td><?php echo htmlspecialchars($fecha_mod); ?></td>
+                            <td><a class="btn badge-estado" href="uploads/<?php echo htmlspecialchars($doc['pdf']); ?>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i>  Ver PDF</a></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($doc = $docs_result->fetch_assoc()): 
-                            $fecha_mod = date("d-m-Y", strtotime($doc['date']));?>
-                            <tr>
-                                <td><i style="color: #00A9E0" class="fa fa-file-pdf-o" aria-hidden="true"></i></td>
-                                <td><?php echo htmlspecialchars($doc['nombre']); ?></td>
-                                <td><?php echo htmlspecialchars($fecha_mod); ?></td>
-                                <td><a class="btn badge-estado" href="uploads/<?php echo htmlspecialchars($doc['pdf']); ?>" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i>  Ver PDF</a></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>No hay documentos relacionados con esta compra.</p>
-            <?php endif; ?>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
         </div>
+        <?php else: ?>
+            <p>No hay documentos relacionados con esta compra.</p>
+        <?php endif; ?>
             <?php else: ?>
                 <p>No se encontró la información solicitada.</p>
             <?php endif; ?>
         </div>
-    </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       var elementos = document.querySelectorAll('.badge-color');
@@ -258,7 +257,7 @@ $proponente_result = $stmt_proponente->get_result();
       });
       filas.forEach(function(fila) {
         if (fila.textContent.includes('Si')){
-          fila.classList.add('active');
+          fila.classList.add('active-adj');
         }
       });
     });

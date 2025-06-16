@@ -25,8 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $usuario = $result->fetch_assoc();
                 if (password_verify($user_pass, $usuario['user_pass'])) {
                     $_SESSION['usuario'] = $user_login;
-                    header("Location: index.php");
-                    exit;
+                    if (isset($_SESSION['previous_page'])) {
+                        header('Location: ' . $_SESSION['previous_page']);
+                        exit();
+                    }else{
+                        header("Location: index.php");
+                        exit;
+                    }
                 } else {
                     $error_message = "Contraseña incorrecta.";
                 }
@@ -48,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <link rel="shortcut icon" href="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/cropped-Escudo-AlcaldiaSanMiguelito-RGB_Vertical-Blanco.png" />
-    <link rel="stylesheet" href="..\css\estilos-pc-asm.scss">
+    <link rel="stylesheet" href="css\estilos-pc-asm.scss">
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Font Awesome -->
@@ -94,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
             
             <p class="mb-1 mt-3">
-                <a onClick="javascript:history.go(-1)"><i style="margin-right: 5px;" class="bi bi-arrow-left-circle-fill"></i>Volver al inicio</a>
+                <a href="http://localhost/compras2/dist/index.php"><i style="margin-right: 5px;" class="bi bi-arrow-left-circle-fill"></i>Volver al inicio</a>
             </p>
         </div>
     </div>

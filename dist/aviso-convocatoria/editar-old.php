@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario'])) {
     exit;
 }
 
-include 'conexion.php'; // Incluir el archivo de conexión
+include '../conexion.php'; // Incluir el archivo de conexión
 $successMessage = "";
 
 // Obtener el ID del registro a editar
@@ -209,6 +209,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }, 2000); // Ocultar después de 30 segundos
             }
         });
+    </script>
+    <script type="text/javascript">
+        window.onbeforeunload = confirmExit;
+        function confirmExit()
+        {
+            return "No se guardarán los cambios en su compra. ¿Está seguro que desea abandonar el formulario?";
+        }
     </script>
 </body>
 </html>

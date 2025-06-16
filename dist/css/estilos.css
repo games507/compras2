@@ -20,12 +20,14 @@ body {
 
 /* Aplicar la tipografía fantasy a los encabezados */
 h1, h2, h3, h4, h5, h6 {
-    font-family: fantasy, sans-serif !important;
+    font-family: "Rubik", serif !important;
 }
 
 /* Cambiar la tipografía del menú */
 .nav-link {
-    font-family: fantasy, sans-serif !important;
+    font-family: "Rubik", serif !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
 }
 
 /* Cambiar la tipografía del pie de página */

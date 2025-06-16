@@ -8,7 +8,7 @@
 // Configuración de la base de datos
 $servername = "localhost";
 $username = "musami_wp804";
-$password = "cypaIaueDq9e";
+$password = "cR3RWpbwLhXQ";
 $dbname = "musami_wp804";
 
 // Crear conexión

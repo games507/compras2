@@ -6,7 +6,7 @@
 // Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
 // Supervisado por Dir. Joseph Arosemena
 
-include 'conexion.php'; 
+include '../conexion.php'; 
 
 $logueado = isset($_SESSION['usuario']);
 $message = ""; // Variable para el mensaje de notificación

@@ -14,10 +14,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous"><!--end::Fonts--><!--begin::Third Party Plugin(OverlayScrollbars)-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" integrity="sha256-dSokZseQNT08wYEWiz5iLI8QPlKxG+TswNRD8k35cpg=" crossorigin="anonymous"><!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Third Party Plugin(Bootstrap Icons)-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous"><!--end::Third Party Plugin(Bootstrap Icons)--><!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../../dist/css/adminlte.css"><!--end::Required Plugin(AdminLTE)--><!-- apexcharts -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous"><!-- jsvectormap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous">
-    <link rel="stylesheet" href="..\css\estilos-pc-asm.scss">
 </head> <!--end::Head--> <!--begin::Body-->
     <style>
         /* Cambiar el fondo de la barra lateral a #002d69 */
@@ -42,7 +40,7 @@
         }
 
         /* Cambiar el color de los enlaces cuando se pasa el mouse */
-        .active, .main-sidebar .nav-link:hover {
+        .active-menu, .main-sidebar .nav-link:hover {
             background-color: #001f4d !important; /* Puedes cambiar el fondo en hover si lo deseas */
             color: #00A9E0 !important;  /* Cambiar el color del texto al pasar el mouse */
             border-radius: 10px;
@@ -126,7 +124,7 @@
         }
     </style>
     
-<div class="app-wrapper"> <!--begin::Header-->
+    <div class="app-wrapper"> <!--begin::Header-->
         <nav class="app-header navbar navbar-expand bg-body"> <!--begin::Container-->
             <div class="container-fluid"> <!--begin::Start Navbar Links-->
                 <ul class="navbar-nav">
@@ -138,9 +136,9 @@
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <a href="#" class="dropdown-item">
                             <?php if ($logueado): ?>
                                 <div></div>
-                                <li class="user-footer"> <a href="cerrar.php" class="btn-logout-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-box-arrow-left"></i>Salir</a> </li> <!--end::Menu Footer-->
+                                <li class="user-footer"> <a href="http://localhost/compras2/dist/cerrar.php" class="btn-logout-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-box-arrow-left"></i>Salir</a> </li> <!--end::Menu Footer-->
                             <?php elseif ($logueado === false): ?>
-                                <li class="user-footer"> <a href="login.php" class="btn-login-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-person-circle"></i>Ingresar</a> </li>
+                                <li class="user-footer"> <a href="http://localhost/compras2/dist/login.php" class="btn-login-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-person-circle"></i>Ingresar</a> </li>
                                 <!--end::Menu Footer-->
                             <?php endif; ?>
                         </ul>
@@ -149,7 +147,7 @@
             </div> <!--end::Container-->
         </nav> <!--end::Header--> <!--begin::Sidebar-->
         <aside style="background-color: #002d69 !important; color: #FFFFFF !important;" class="app-sidebar shadow"> <!--begin::Sidebar Brand-->
-            <div class="sidebar-brand-pc"> <!--begin::Brand Link--> <a href="./index.php" class="brand-link"> <!--begin::Brand Image--> <img src="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/Escudo-AlcaldiaSanMiguelito-RGB_Horizontal-Blanco-1.png" alt="ASM" class="brand-image"> <!--end::Brand Image--> <!--begin::Brand Text--> <!--end::Brand Text--> </a> <!--end::Brand Link--> </div> <!--end::Sidebar Brand--> <!--begin::Sidebar Wrapper-->
+            <div class="sidebar-brand-pc"> <!--begin::Brand Link--> <a href="https://alcaldiasanmiguelito.gob.pa" class="brand-link"> <!--begin::Brand Image--> <img src="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/Escudo-AlcaldiaSanMiguelito-RGB_Horizontal-Blanco-1.png" alt="ASM" class="brand-image"> </a>  </div>
                 <div class="sidebar-wrapper">
                     <div class="wrapper">
                         <!-- Navbar -->
@@ -164,74 +162,81 @@
                         <aside class="main-sidebar">
                             <!-- Brand Logo -->
                             <div class="brand-ASM">
-                                <div style="border-bottom: solid 1px white;"><img src="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/Escudo-AlcaldiaSanMiguelito-RGB_Horizontal-Blanco.png" alt="Logo" class="brand-image-pc"></div>
+                                <div style="border-bottom: solid 1px white;"><a href="https://alcaldiasanmiguelito.gob.pa"><img src="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/Escudo-AlcaldiaSanMiguelito-RGB_Horizontal-Blanco.png" alt="Logo" class="brand-image-pc"></a></div>
                                 <div style="padding-top: 10px;"><h5><i style="padding-right: 10px;" class="fas fa-shopping-cart"></i><b>Portal de Compras</b></h5></div>
                             </div>
                             <!-- Sidebar -->
                             <div class="sidebar">
                                 <!-- Sidebar Menu -->
                                 <nav class="mt-2">
-                                    <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                                    <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="position: relative;">
                                         <li class="nav-item">
-                                            <a id="inicio" href="index.php" class="nav-link">
+                                            <a href="http://localhost/compras2/dist/index.php" class="nav-link">
                                                 <i class="nav-icon fas fa-home"></i>
                                                 <p>Inicio</p>
                                             </a>
                                         </li>
-                                        <?php if ($logueado): ?>
+                                        <hr/>
                                         <li class="nav-item">
-                                            <a id="registrar" href="formulario_compra.html" class="nav-link">
-                                                <i class="nav-icon fas fa-edit"></i>
-                                                <p>Registrar Compra</p>
+                                            <a id="rotarid" data-toggle="collapse" aria-expanded="false" href="#multiCollapseOpc1" class="nav-link" aria-controls="multiCollapseOpc1">
+                                                <i class="nav-icon bi bi-file-earmark-bar-graph-fill"></i>
+                                                <p>Aviso de Convocatorias</p>
+                                                <div >
+                                                    <svg id="rotardiv"class="flecha-dopdown" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16" style="margin-top:auto; margin-bottom: auto;">
+                                                        <path  d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                                    </svg>
+                                                </div>
                                             </a>
+                                            <ul class="collapse" id="multiCollapseOpc1">
+                                                <li class="sub-nav-item" style="list-style-type: none;">
+                                                    <a href="http://localhost/compras2/dist/aviso-convocatoria/index.php" class="nav-link">
+                                                        <i class="nav-icon bi bi-cart-check-fill"></i>
+                                                        <p>Todas las compras</p>
+                                                    </a>
+                                                </li>
+                                                <li class="sub-nav-item" style="list-style-type: none;">
+                                                    <a href="http://localhost/compras2/dist/aviso-convocatoria/vigente.php" class="nav-link">
+                                                        <i class="nav-icon bi bi-clipboard2-pulse-fill"></i>
+                                                        <p>Vigentes</p>
+                                                    </a>
+                                                </li>
+                                                <li class="sub-nav-item" style="list-style-type: none;">
+                                                    <a href="http://localhost/compras2/dist/aviso-convocatoria/adjudicados.php" class="nav-link">
+                                                        <i class="nav-icon bi bi-check-circle-fill"></i>
+                                                        <p>Adjudicadas</p>
+                                                    </a>
+                                                </li>
+                                                <li class="sub-nav-item" style="list-style-type: none;">
+                                                    <a href="http://localhost/compras2/dist/aviso-convocatoria/cancelados.php" class="nav-link">
+                                                        <i class="nav-icon bi bi-x-octagon-fill"></i>
+                                                        <p>Cancelados</p>
+                                                    </a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        <?php endif; ?>
-                                        
+                                        <hr/>
                                         <li class="nav-item">
-                                            <a id="lista" href="ver_registrosx.php" class="nav-link">
-                                                <i class="nav-icon fas fa-list"></i>
-                                                <p>Lista de Compras</p>
-                                            </a>
-                                        </li>
-                                        <?php if ($logueado): ?>
-                                        <li class="nav-item">
-                                            <a href="buscar.php" class="nav-link">
-                                                <i class="nav-icon fas fa-edit"></i>
-                                                <p>Editar</p>
-                                            </a>
-                                        </li>
-                                        <?php endif; ?>
-                                        <!-- Estado de Compras -->
-                                        <li class="nav-item">
-                                            <a href="adjudicados.php" class="nav-link">
-                                                <i class="nav-icon fas fa-check-circle"></i>
-                                                <p>Adjudicados</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="cancelados.php" class="nav-link">
-                                                <i class="nav-icon fas fa-times-circle"></i>
-                                                <p>Cancelados</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="vigente.php" class="nav-link">
-                                                <i class="nav-icon fas fa-folder-open"></i>
-                                                <p>Vigentes</p>
+                                            <a href="http://localhost/compras2/dist/orden-compra/index.php" class="nav-link">
+                                                <i class="nav-icon bi bi-receipt-cutoff"></i>
+                                                <p>Orden de Compra</p>
                                             </a>
                                         </li>
                                     </ul>
-                                </nav>
-                                <!-- /.sidebar-menu -->
-                                </div>
-                            </div> <!--end::Sidebar Wrapper-->
-                        </aside> <!--end::Sidebar--> <!--begin::App Main-->
-                        <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-H2VM7BKda+v2Z4+DRy69uknwxjyDRhszjXFhsL4gD3w=" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+                    </nav>
+                <!-- /.sidebar-menu -->
+                </div>
+            </div> <!--end::Sidebar Wrapper-->
+        </aside> <!--end::Sidebar--> <!--begin::App Main-->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-H2VM7BKda+v2Z4+DRy69uknwxjyDRhszjXFhsL4gD3w=" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-H2VM7BKda+v2Z4+DRy69uknwxjyDRhszjXFhsL4gD3w=" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha256-whL0tQWoY1Ku1iskqPFvmZ+CHsvmRWx/PIoEvIeWh4I=" crossorigin="anonymous"></script> <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha256-YMa+wAM6QkVyz999odX7lPRxkoYAan8suedu4k2Zur8=" crossorigin="anonymous"></script> <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../../dist/js/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js" integrity="sha256-ipiJrswvAR4VAx/th+6zWsdeYmVae0iJuiR+6OqHJHQ=" crossorigin="anonymous"></script> <!-- sortablejs -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
         const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
         const Default = {
             scrollbarTheme: "os-theme-light",
@@ -257,30 +262,39 @@
             var current = location.pathname;
             $('.nav-item .nav-link').each(function() {
                 var $this = $(this);
-                if (current.endsWith($this.attr('href'))) {
+                if ($this.attr('href').endsWith(current)) {
                 // if the current path is like this link, make it active
-                    $this.addClass('active');
+                    $this.addClass('active-menu');
+                }
+            });
+            $('.sub-nav-item .nav-link').each(function() {
+                var $this = $(this);
+                if ($this.attr('href').endsWith(current)) {
+                // if the current path is like this link, make it active
+                    $this.addClass('active-menu');
+                    $('.nav-item .nav-link').each(function() {
+                        var $sub_this = $(this);
+                        if($sub_this.text().includes('Aviso de Convocatoria')){
+                            $sub_this.addClass('active-menu')
+                        }
+                    });
+                }else{
+                    
                 }
             });
         });
-    </script> <!--end::OverlayScrollbars Configure--> <!-- OPTIONAL SCRIPTS --> <!-- sortablejs -->
-    <script>
-    function setActiveButton() {
-            // Obtener el enlace actual
-            const currentPath = window.location.pathname;
-            console.log(currentPath);
-
-            // Remover la clase 'active' de todos los botones
-            buttons.forEach(button => button.classList.remove('active'));
-
-            // Agregar la clase 'active' al botón correspondiente
-            if (currentPath.includes('index.php')) {
-                document.getElementById('inicio').classList.add('active');
-            } else if (currentPath.includes('formulario_compra')) {
-                document.getElementById('registrar').classList.add('active');
-            } else if (currentPath.includes('ver_registrox')) {
-                document.getElementById('lista').classList.add('active');
-            }
-        }
-</script>
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(e) {
+            $("#rotarid").click(function() {
+ 
+                var rotarDiv = $("#rotardiv");
+                if (rotarDiv.css("transform") == 'none' || rotarDiv.css("transform") == 'matrix(1, 0, 0, 1, 0, 0)') {
+                    rotarDiv.css("transform", "rotate(90deg)");
+                } else {
+                    rotarDiv.css("transform", "rotate(0deg)");
+                }
+            });
+        });
+    </script>
 

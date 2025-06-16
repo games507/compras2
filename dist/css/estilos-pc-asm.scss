@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 
 body{
-  font-family: "Rubik", serif;
+  font-family: "Rubik", serif !important;
 }
 
 .btn-login-pc{
@@ -148,14 +148,14 @@ body{
 
 
 .tb-pc-1{
-  border: 1px solid rgba(0, 0, 0, .125);
-  overflow-x:scroll;
+  border: 1px solid rgba(0, 0, 0, .125) !important;
+  overflow-x:scroll !important;
 }
 
 .tb-pc-1 thead{
   border-bottom: 2px solid rgba(0, 0, 0, .125);
   border-top: 1.5px solid rgba(0, 0, 0, .125);
-  color: #002F6C;
+  color: #002F6C !important;
   text-align: center !important;
 }
 
@@ -225,10 +225,10 @@ body{
   overflow: hidden;
   & thead{
     border-radius: 10px;
-    background-color: #002F6C;
+    background-color: #002F6C !important;
     color: white;
-    border-bottom: 1.5px solid #00A9E0;
-    border-top: 1.5px solid #00A9E0;
+    border-bottom: 1.5px solid #00A9E0 !important;
+    border-top: 1.5px solid #00A9E0 !important;
   }
   & tr td:last-child, tr td:first-child {
     text-align: center;
@@ -259,7 +259,7 @@ body{
   box-sizing: border-box;
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, .125);
-  border-left: 15px solid #002F6C;
+  border-left: 15px solid #002F6C !important;
 }
 
 .cont-portal{
@@ -341,7 +341,7 @@ body{
   color: white; /* Color del texto en hover */
 }
 
-.pagination .page-item.active .page-link {
+.pagination .page-item .active .page-link {
   background-color: #00A9E0; /* Fondo para el botón activo */
   color: white; /* Color del texto en el botón activo */
   border-color: #00A9E0; /* Color del borde para el botón activo */
@@ -384,13 +384,130 @@ body{
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
-    border: 1px solid #000000;
     border-radius: 5px;
     font-size: 16px;
     font-family: "Rubik", serif !important;
 }
 
-    .frm-edit-pc input:focus,
-    .frm-edit-pc input:hover {
-        border: 1.5px solid #00A9E0 !important;
+.frm-edit-pc input:focus,
+.frm-edit-pc input:hover {
+	border: 1.5px solid #00A9E0 !important;
+}
+
+.req:after{
+  content: '*';
+  color: red;
+}
+
+.badge-color{
+  	padding: 4px 8px;
+  	text-align: center;
+  	border-radius: 15px;
+	color: black;
+}
+
+.vigente {
+	background-color: #00A9E0 !important;
+	color: white !important;
+}
+
+.adjudicado {
+	background-color: #009639 !important;
+	color: white !important;
+}
+
+.cancelado-desierto {
+	background-color: #ccc !important;
+	color: #7A7A7A !important;
+}
+
+.active-menu {
+	background-color: #001f4d !important;
+}
+
+.active-adj {
+	background-color: #9dff9d9c !important;
+}
+
+.nav-sidebar {
+  .nav-item {
+    > .nav-link {
+      margin-bottom: 0px !important;
+      margin-top: 5px !important;
     }
+  }
+}
+
+hr{
+  margin-top: 0 !important;
+  margin-bottom:0 !important;
+  border-bottom: 1px solid !important;
+  color: white !important;
+  opacity: 1 !important;
+}
+
+.sub-nav-item .nav-link{
+  margin-bottom: 4px !important;
+  font-family: "Rubik", serif !important;
+}
+
+/* Cambiar el fondo de la barra lateral a #002d69 */
+.main-sidebar {
+  background-color: #002d69 !important;
+}
+
+/* Cambiar las letras de los enlaces de la barra lateral a blanco */
+.main-sidebar .nav-link {
+  color: white !important;
+}
+
+/* Cambiar el color de los íconos a blanco */
+.main-sidebar .nav-icon {
+  color: white !important;
+}
+
+/* Cambiar el color de los íconos cuando se pasa el mouse */
+.main-sidebar .nav-link:hover .nav-icon {
+  color: #f8f9fa !important;  /* Puedes cambiar el color de los íconos en hover si lo deseas */
+}
+
+/* Cambiar el color de los enlaces cuando se pasa el mouse */
+.main-sidebar .nav-link:hover {
+  background-color: #001f4d !important; /* Puedes cambiar el fondo en hover si lo deseas */
+  color: #f8f9fa !important;  /* Cambiar el color del texto al pasar el mouse */
+}
+.font-style-title {
+font-family: 'Nunito', sans-serif !important;
+}
+.font-style-subtitle {
+font-family: 'Nunito', sans-serif !important;
+}
+.font-style-heading {
+font-family: 'Nunito', sans-serif !important;
+}
+.font-style-normalText {
+font-family: 'Nunito', sans-serif !important;
+}
+.btn-primary {
+  background-color: #002d69 !important; 
+  
+  color: white !important; /* Texto blanco */
+}
+.btn-info{
+  background-color: #002d69 !important; 
+  
+  color: white !important; /* Texto blanco */
+}
+
+.nav-tabs .nav-link.active{
+  font-weight: bold !important;
+  color: #002F6C !important;
+}
+
+.nav-tabs .nav-link{
+  color: #00A9E0 !important;
+}
+
+.table > :not(caption) > *{
+  color: #002F6C !important;
+}

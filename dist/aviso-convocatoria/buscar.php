@@ -10,7 +10,7 @@ session_start(); // Inicia la sesión para poder acceder a $_SESSION
 // Verifica si el usuario está logueado
 $logueado = isset($_SESSION['usuario']);
 
-include 'conexion.php'; // Conexión a la base de datos
+include '../conexion.php'; // Conexión a la base de datos
 
 // Inicializar variables
 $searchTerm = '';
@@ -63,18 +63,21 @@ $totalPages = max(ceil($totalRecords / $resultsPerPage), 1);
     <!--Datos de la pestaña del navegador-->
     <title>Editar Compra | Portal de Compras</title>
     <link rel="shortcut icon" href="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/cropped-Escudo-AlcaldiaSanMiguelito-RGB_Vertical-Blanco.png" />
-    <!-- Estilos -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <!-- AdminLTE CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Archivo CSS personalizado -->
+    <link rel="stylesheet" href="..\css\estilos-pc-asm.scss">
+    <link rel="stylesheet" href="..\css\adminlte.css">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <?php include 'menu.php';?>
+    <?php include '../menu.php';?>
     <main class="app-main">
     <!-- Contenido principal -->
     <div class="">
