@@ -5,14 +5,15 @@
 // Creditos Anthony Santana Desarrollador
 // Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
 // Supervisado por Dir. Joseph Arosemena
-session_start(); // Inicia la sesión para poder acceder a $_SESSION
+session_start();
 //Definimos la sesión como FALSE para validar elementos propios de la sesión activa
 $logueado = false;
 $_SESSION['previous_page'] = false;
 // Verifica si el usuario está logueado
-$logueado = isset($_SESSION['usuario']);
+$logueado = isset($_SESSION['user']);
 $show_submenu = isset($_SESSION['show_submenu']);
 $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
+include 'conexion.php'; // Incluir el archivo de conexión
 ?>
 
 <!DOCTYPE html>
@@ -152,28 +153,19 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
             <div class="container-fluid"> <!--begin::Row-->
                 <div class="row">
                     <div class="col-lg-6 col-6">
-                        <h3 style="padding-top: 12px !important; padding-left: 12px !important;" class="mb-0"><b>Aviso de Convocatoria</b></h3></br>
+                        <h3 style="padding-top: 12px !important; padding-left: 12px !important;" class="mb-0"><b>Aviso de Convocatoria</b></h3>
+                        <p style="padding-left: 12px !important; color: #808080; margin-bottom: 10px !important;" class="mb-0">Compras mayores a B./10,000.00 y menores a B./50,000.00</p>
                     </div>
-                    <?php
-                    // Conexión a la base de datos (ajusta según tus parámetros)
-                    $host = 'localhost';
-                    $dbname = 'musami_wp804';
-                    $username = 'musami_wp804';
-                    $password = 'cR3RWpbwLhXQ';
-                    
+                    <?php        
                     try {
-                        // Crear la conexión PDO
-                        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    
                         // Consulta para contar los registros de la columna 'no_compra'
                         $query = "SELECT COUNT(no_compra) AS total FROM wp_portalcompra";
-                        $stmt = $pdo->query($query);
+                        $stmt = $conn->query($query);
                     
                         // Obtener el resultado
-                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $result = $stmt->fetch_assoc()['total'];
                         if ($result) {
-                            $total_no_compra = $result['total']; // Total de registros
+                            $total_no_compra = $result; // Total de registros
                         } else {
                             $total_no_compra = 0; // Si no hay registros, devuelve 0
                         }
@@ -197,31 +189,20 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                                         <svg class="small-box-icon" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path transform="translate(1, 1)" d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0m7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708"></path>
                                         </svg> <a href="./aviso-convocatoria/index.php" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                            Ver Enlace <i class="bi bi-link-45deg"></i> </a>
+                                            Ver todas las compras<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div>
                                 <?php
-                                // Conexión a la base de datos (ajusta según tus parámetros)
-                                $host = 'localhost';
-                                $dbname = 'musami_wp804';
-                                $username = 'musami_wp804';
-                                $password = 'cR3RWpbwLhXQ';
-                                
                                 try {
-                                    // Crear la conexión PDO
-                                    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                                
-                                    // Consulta para contar los registros de la columna 'estado'
                                     $query = "SELECT COUNT(*) AS total_vigente
                                     FROM wp_portalcompra
                                     WHERE estado = 'vigente'";
-                                    $stmt = $pdo->query($query);
+                                    $stmt = $conn->query($query);
                                 
                                     // Obtener el resultado
-                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    $result = $stmt->fetch_assoc()['total_vigente'];
                                     if ($result) {
-                                        $total_estado = $result['total_vigente']; // Total de registros
+                                        $total_estado = $result; // Total de registros
                                     } else {
                                         $total_estado = 0; // Si no hay registros, devuelve 0
                                     }
@@ -240,31 +221,20 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                                             <path transform="translate(1, 1)" d="M10 .5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5.5.5 0 0 1-.5.5.5.5 0 0 0-.5.5V2a.5.5 0 0 0 .5.5h5A.5.5 0 0 0 11 2v-.5a.5.5 0 0 0-.5-.5.5.5 0 0 1-.5-.5"/>
                                             <path transform="translate(1, 1)" d="M4.085 1H3.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1h-.585q.084.236.085.5V2a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 2v-.5q.001-.264.085-.5M9.98 5.356 11.372 10h.128a.5.5 0 0 1 0 1H11a.5.5 0 0 1-.479-.356l-.94-3.135-1.092 5.096a.5.5 0 0 1-.968.039L6.383 8.85l-.936 1.873A.5.5 0 0 1 5 11h-.5a.5.5 0 0 1 0-1h.191l1.362-2.724a.5.5 0 0 1 .926.08l.94 3.135 1.092-5.096a.5.5 0 0 1 .968-.039Z"></path>
                                         </svg> <a href="./aviso-convocatoria/vigente.php" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                            Ver Enlace<i class="bi bi-link-45deg"></i> </a>
+                                            Ver vigentes<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div> 
                                 <?php
-                                // Conexión a la base de datos (ajusta según tus parámetros)
-                                $host = 'localhost';
-                                $dbname = 'musami_wp804';
-                                $username = 'musami_wp804';
-                                $password = 'cR3RWpbwLhXQ';
-            
                                 try {
-                                    // Crear la conexión PDO
-                                    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                                
-                                    // Consulta para contar los registros de la columna 'estado'
                                     $query = "SELECT COUNT(*) AS total_adjudicados
                                     FROM wp_portalcompra
                                     WHERE estado = 'adjudicado'";
-                                    $stmt = $pdo->query($query);
+                                    $stmt = $conn->query($query);
                                 
                                     // Obtener el resultado
-                                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                                    $result = $stmt->fetch_assoc()['total_adjudicados'];
                                     if ($result) {
-                                        $total_estado = $result['total_adjudicados']; // Total de registros
+                                        $total_estado = $result; // Total de registros
                                     } else {
                                         $total_estado = 0; // Si no hay registros, devuelve 0
                                     }
@@ -283,25 +253,15 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                                         <svg class="small-box-icon" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path transform="translate(1, 1)" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"></path>
                                         </svg> <a href="./aviso-convocatoria/adjudicados.php" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                            Ver Enlace <i class="bi bi-link-45deg"></i> </a>
+                                            Ver adjudicados<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div>
                                 <?php
-                                // Conexión a la base de datos (ajusta según tus parámetros)
-                                $host = 'localhost';
-                                            $dbname = 'musami_wp804';
-                                            $username = 'musami_wp804';
-                                            $password = 'cR3RWpbwLhXQ';
                                 try {
-                                    // Crear la conexión PDO
-                                    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-                                    // Consulta para contar los registros de la columna 'estado' con el valor 'cancelado'
                                     $query_cancelado = "SELECT COUNT(*) AS total_cancelado FROM wp_portalcompra WHERE estado = 'Desierto' OR estado = 'Cancelado'";
-                                    $stmt_cancelado = $pdo->query($query_cancelado);
-                                    $result_cancelado = $stmt_cancelado->fetch(PDO::FETCH_ASSOC);
-                                    $total_cancelado = $result_cancelado ? $result_cancelado['total_cancelado'] : 0; // Si no hay registros, devuelve 0
+                                    $stmt_cancelado = $conn->query($query_cancelado);
+                                    $result_cancelado = $stmt_cancelado->fetch_assoc()['total_cancelado'];
+                                    $total_cancelado = $result_cancelado ? $result_cancelado : 0; // Si no hay registros, devuelve 0
 
                                 } catch (PDOException $e) {
                                     // Manejo de errores
@@ -317,7 +277,7 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                                         </div> <svg class="small-box-icon" fill="currentColor" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                             <path transform="translate(1, 1)" d="M11.46.146A.5.5 0 0 0 11.107 0H4.893a.5.5 0 0 0-.353.146L.146 4.54A.5.5 0 0 0 0 4.893v6.214a.5.5 0 0 0 .146.353l4.394 4.394a.5.5 0 0 0 .353.146h6.214a.5.5 0 0 0 .353-.146l4.394-4.394a.5.5 0 0 0 .146-.353V4.893a.5.5 0 0 0-.146-.353zm-6.106 4.5L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708"></path>
                                         </svg> <a href="./aviso-convocatoria/cancelados.php" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                            Ver Enlace<i class="bi bi-link-45deg"></i> </a>
+                                            Ver cancelados y desiertos<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div>
                             </div>
@@ -325,28 +285,17 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                     </div>
                     <div><br></div>
                     <div class="col-lg-6 col-6">
-                        <h3 style="padding-top: 12px !important; padding-left: 12px !important;" class="mb-0"><b>Orden de Compra</b></h3></br>
+                        <h3 style="padding-left: 12px !important;" class="mb-0"><b>Orden de Compra</b></h3>
+                        <p style="padding-left: 12px !important; color: #808080; margin-bottom: 10px !important;" class="mb-0">Compras menores a B./10,000.00</p>
                     </div>
                     <?php
-                    // Conexión a la base de datos (ajusta según tus parámetros)
-                    $host = 'localhost';
-                    $dbname = 'musami_wp804';
-                    $username = 'musami_wp804';
-                    $password = 'cR3RWpbwLhXQ';
-                    
                     try {
-                        // Crear la conexión PDO
-                        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    
-                        // Consulta para contar los registros de la columna 'no_compra'
                         $query = "SELECT COUNT(no_compra) AS total FROM wp_ordencompra";
-                        $stmt = $pdo->query($query);
-                    
-                        // Obtener el resultado
-                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $stmt = $conn->query($query);
+
+                        $result = $stmt->fetch_assoc()['total'];
                         if ($result) {
-                            $total_no_compra = $result['total']; // Total de registros
+                            $total_no_compra = $result; // Total de registros
                         } else {
                             $total_no_compra = 0; // Si no hay registros, devuelve 0
                         }
@@ -370,7 +319,7 @@ $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
                                             <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
                                             <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z"/>
                                         </svg> <a href="./orden-compra/index.php" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                                            Ver Enlace <i class="bi bi-link-45deg"></i> </a>
+                                            Ver órdenes de compra<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div>
                     <!--L4-->

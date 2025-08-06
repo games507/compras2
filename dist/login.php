@@ -3,9 +3,7 @@
 // Municipio de San Miguelito
 // Portal de Compra Noviembre 2024
 // Creditos Anthony Santana Desarrollador
-// Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
 // Supervisado por Dir. Joseph Arosemena
-session_start();
 include 'conexion.php';
 
 // Verificar si el formulario fue enviado
@@ -14,32 +12,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_pass = trim($_POST['user_pass']);
 
     if (!empty($user_login) && !empty($user_pass)) {
-        $sql = "SELECT * FROM wp_users WHERE user_login = ?";
-        $stmt = $conn->prepare($sql);
-        if ($stmt) {
-            $stmt->bind_param("s", $user_login);
-            $stmt->execute();
-            $result = $stmt->get_result();
+        $sql_temp = "SELECT * FROM user_temp WHERE user = ? AND estado = 0";
+        $stmt_temp = $conn->prepare($sql_temp);
+        $stmt_temp->bind_param("s", $user_login);
+        $stmt_temp->execute();
+        $pre_search = $stmt_temp->get_result();
 
-            if ($result->num_rows === 1) {
-                $usuario = $result->fetch_assoc();
-                if (password_verify($user_pass, $usuario['user_pass'])) {
-                    $_SESSION['usuario'] = $user_login;
-                    if (isset($_SESSION['previous_page'])) {
-                        header('Location: ' . $_SESSION['previous_page']);
-                        exit();
-                    }else{
-                        header("Location: index.php");
-                        exit;
+        if ($pre_search->num_rows === 0) {
+            $sql = "SELECT * FROM user_compra WHERE user = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("s", $user_login);
+                $stmt->execute();
+                $search = $stmt->get_result();
+
+                if ($search->num_rows === 1) {
+                    $usuario = $search->fetch_assoc();
+                    $hashed_password_input = md5($user_pass);
+                    $result = mysqli_query($conn, "SELECT * FROM user_compra WHERE user = '$user_login' AND pass = '$hashed_password_input'");
+                    if (mysqli_num_rows($result) > 0) {
+                        session_start();
+                        $_SESSION['user'] = $user_login;
+                        $_SESSION['rol'] = $usuario['rol'];
+                        $image = imagecreate(512, 512);
+                        $text_color = imagecolorallocate($image, 0, 47, 108);
+                        $background_color = imagecolorallocate($image, 255, 255, 255);
+                        $font_path = __DIR__.'/arial.ttf';
+                        $text = substr($usuario['nombre'], 0, 1) . substr($usuario['apellido'], 0, 1);;
+                        imagefill($image, 0, 0, $background_color);
+                        imagettftext($image, 220, 0, 50, 350, $text_color, $font_path, $text );
+                        $filename = "imagen-". $_SESSION['user'] .".png";
+                        imagepng($image, "profiles/" . $filename);
+                        if (isset($_SESSION['previous_page'])) {
+                            header('Location: ' . $_SESSION['previous_page']);
+                            exit();
+                        }else{
+                            header("Location: index.php");
+                            exit;
+                        }
+                    } else {
+                        $error_message = "Contraseña incorrecta.";
                     }
                 } else {
-                    $error_message = "Contraseña incorrecta.";
+                    $error_message = "Usuario no encontrado.";
                 }
             } else {
-                $error_message = "Usuario no encontrado.";
+                $error_message = "Error en la consulta.";
             }
         } else {
-            $error_message = "Error en la consulta.";
+            echo("<script></script>");
         }
     } else {
         $error_message = "Por favor, complete todos los campos.";
@@ -62,9 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="login-page-pc">
-<div class="login-box">
+<div class="login-box" style="border-radius: 30px;">
     <div class="card">
-        <div class="card-body login-card-body">
+        <div class="card-body login-card-body" style="align-items: center; text-align: center !important; border-radius: 30px;">
+            <img class="brand-image-pc" style="max-width: 200px;" src="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/Escudo-AlcaldiaSanMiguelito-RGB_Horizontal.png">
             <h3 class="login-box-msg">¡Hola! <b>Bienvenido</b></h3>
             <p class="login-box-msg">Inicia sesión para continuar</p>
             

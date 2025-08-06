@@ -1,3 +1,6 @@
+<?php
+
+?>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Datos de la pestaña del navegador-->
@@ -131,11 +134,12 @@
                     <li class="nav-item"> <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"> <i class="bi bi-list"></i> </a> </li>
                     <li class="nav-item d-none d-md-block"> <b><a href="https://alcaldiasanmiguelito.gob.pa/" class="nav-link">Inicio</a></b></li>
                 </ul> <!--end::Start Navbar Links--> <!--begin::End Navbar Links-->
+                
                 <ul class="navbar-nav ms-auto"> <!--begin::Navbar Search-->
                     <li class="nav-item dropdown">  
-                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <a href="#" class="dropdown-item">
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             <?php if ($logueado): ?>
-                                <div></div>
+                                <li class="user-footer"><img style="max-width: 38px; border-radius: 50px !important; margin-right: 10px; border: 3px solid #002F6C;" src="http://localhost/compras2/dist/profiles/imagen-<?php echo htmlspecialchars($_SESSION['user']); ?>.png"></li>
                                 <li class="user-footer"> <a href="http://localhost/compras2/dist/cerrar.php" class="btn-logout-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-box-arrow-left"></i>Salir</a> </li> <!--end::Menu Footer-->
                             <?php elseif ($logueado === false): ?>
                                 <li class="user-footer"> <a href="http://localhost/compras2/dist/login.php" class="btn-login-pc"><i style="margin-left:5px; margin-right:5px;" class="bi bi-person-circle"></i>Ingresar</a> </li>
@@ -178,7 +182,7 @@
                                         </li>
                                         <hr/>
                                         <li class="nav-item">
-                                            <a id="rotarid" data-toggle="collapse" aria-expanded="false" href="#multiCollapseOpc1" class="nav-link" aria-controls="multiCollapseOpc1">
+                                            <a id="rotarid" data-toggle="collapse" aria-expanded="false" href="#multiCollapseOpc1" class="nav-link" aria-controls="multiCollapseOpc1" style="margin-top: 3.2px;">
                                                 <i class="nav-icon bi bi-file-earmark-bar-graph-fill"></i>
                                                 <p>Aviso de Convocatorias</p>
                                                 <div >
@@ -216,11 +220,20 @@
                                         </li>
                                         <hr/>
                                         <li class="nav-item">
-                                            <a href="http://localhost/compras2/dist/orden-compra/index.php" class="nav-link">
+                                            <a href="http://localhost/compras2/dist/orden-compra/index.php" class="nav-link" style="margin-top: 3.2px;">
                                                 <i class="nav-icon bi bi-receipt-cutoff"></i>
                                                 <p>Orden de Compra</p>
                                             </a>
                                         </li>
+                                        <?php if (isset($_SESSION['rol']) and $_SESSION['rol'] == "Admin"): ?>
+                                        <hr/>
+                                        <li class="nav-item">
+                                            <a href="http://localhost/compras2/adm-asm/index.php" class="nav-link" style="margin-top: 3.2px;">
+                                                <i class="nav-icon bi bi-gear-fill"></i>
+                                                <p>Administración</p>
+                                            </a>
+                                        </li>
+                                        <?php endif; ?>
                                     </ul>
                     </nav>
                 <!-- /.sidebar-menu -->

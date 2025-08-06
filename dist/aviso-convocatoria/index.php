@@ -9,7 +9,7 @@
 session_start(); // Inicia la sesión para poder acceder a $_SESSION
 
 // Verifica si el usuario está logueado
-$logueado = isset($_SESSION['usuario']);
+$logueado = isset($_SESSION['user']);
 $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
 
 include '../conexion.php'; // Incluir el archivo de conexión
@@ -186,7 +186,7 @@ if ($result === false) {
                                             <td><?php echo htmlspecialchars($fecha_pub); ?></td>
                                             <td><span class="badge-color"><?php echo htmlspecialchars($row['estado']); ?></span></td>
                                             <td>
-                                                <a href="resultados.php?id=<?php echo urlencode($row['no_compra']); ?>"><i class="fas fa-eye"></i></a>
+                                                <a href="resultados.php?id=<?php echo urlencode($row['no_compra']); ?>" class="btn btn-sm"><i class="fas fa-eye"></i></a>
                                                 <?php if ($logueado): ?>
                                                 <!-- Botón de editar -->
                                                 <a style="background-color: #002F6C;" href="editar.php?id=<?php echo $row['id']; ?>" class="btn btn-sm">

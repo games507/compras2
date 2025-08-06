@@ -6,21 +6,29 @@ body{
 }
 
 .btn-login-pc{
+  padding: 8px;
   color: white !important;
   border-radius: 10px !important;
-  padding: 10px;
+  width: 100px;
+  height: 39px;
   background-color: #009639;
   text-decoration: none !important;
   margin: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
-.btn-logout-pc{
+.btn-logout-pc {
+  padding: 8px;
+  display: flex;
+  width: 100px;
+  height: 39px;
   color: white !important;
   border-radius: 10px !important;
-  padding: 10px;
   background-color: #D50032;
   text-decoration: none !important;
-  margin: 10px;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-page-pc {
@@ -208,6 +216,7 @@ body{
 
 .tb-pc-1 a:hover{
   background-color: #00A9E0;
+  color: white;
 }
 
 .tb-pc-1 .nomb-doc{
@@ -400,9 +409,9 @@ body{
 }
 
 .badge-color{
-  	padding: 4px 8px;
-  	text-align: center;
-  	border-radius: 15px;
+  padding: 4px 8px;
+  text-align: center;
+  border-radius: 15px;
 	color: black;
 }
 
@@ -508,6 +517,19 @@ font-family: 'Nunito', sans-serif !important;
   color: #00A9E0 !important;
 }
 
-.table > :not(caption) > *{
+.table thead > :not(caption) > *{
   color: #002F6C !important;
+}
+
+div:where(.swal2-icon).swal2-warning{
+  border-color: #D50032 !important;
+  color: #D50032 !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):hover{
+  background-color: #9A0026 !important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel):hover{
+  background-color: #4D4D4D !important;
 }

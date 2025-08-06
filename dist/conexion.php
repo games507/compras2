@@ -9,7 +9,7 @@
 $servername = "localhost";
 $username = "musami_wp804";
 $password = "cR3RWpbwLhXQ";
-$dbname = "musami_wp804";
+$dbname = "portal_compra";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);

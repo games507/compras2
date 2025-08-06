@@ -199,6 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script>
+        console.log("Hola");
         document.addEventListener("DOMContentLoaded", function() {
             const popup = document.getElementById('popupMessage');
             if (popup.textContent.trim() !== "") {

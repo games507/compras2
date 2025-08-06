@@ -9,7 +9,7 @@
 session_start(); // Inicia la sesión para poder acceder a $_SESSION
 
 // Verifica si el usuario está logueado
-$logueado = isset($_SESSION['usuario']);
+$logueado = isset($_SESSION['user']);
 include '../conexion.php'; // Incluir el archivo de conexión
 
 // Variables para la búsqueda

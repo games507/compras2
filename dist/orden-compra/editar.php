@@ -6,8 +6,8 @@
 // Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
 // Supervisado por Dir. Joseph Arosemena
 session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: login.php");
+if (!isset($_SESSION['user'])) {
+    header("Location: ../login.php");
     exit;
 }
 
@@ -24,40 +24,9 @@ $stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
 $record = $result->fetch_assoc();
+$current_doc = $record['pdf'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Valores del formulario
-    $id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
-    $no_compra = $_POST['no_compra'] ?? '';
-    $descripcion = $_POST['descripcion'] ?? '';
-    $proveedor = $_POST['proveedor'] ?? '';
-    $monto = $_POST['monto'] ?? '';
-    $f_publicacion = $_POST['f_publicacion'] ?? '';
-    $pdf = $_POST['pdf'] ?? '';
-
-    // Actualización segura de los datos
-    $sql = "UPDATE wp_portalcompra SET 
-                no_compra = ?, 
-                descripcion = ?, 
-                proveedor = ?, 
-                monto = ?, 
-                f_publicacion = ?,  
-                pdf = ? 
-            WHERE id = ?";
-
-    // Preparar y ejecutar la sentencia
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssi", $no_compra, $descripcion, $proveedor, $monto, $f_publicacion, $pdf, $id);
-
-    if ($stmt->execute()) {
-        $successMessage = "Registro actualizado con éxito.";
-    } else {
-        echo "<p>Error al actualizar el registro: " . htmlspecialchars($stmt->error) . "</p>";
-    }
-}
 ?>
-
-<!-- HTML del formulario sigue aquí -->
 
 <!DOCTYPE html>
 <html lang="es">
@@ -146,9 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container-fluid">
             <div class="card card-primary">
                 <div style="padding-top: 40px; text-align: center;"><h2>Editar Registro</h2></div>
-                <form method="POST" class="frm-edit-pc">
+                <form method="POST" action="actualizar.php" class="frm-edit-pc" enctype="multipart/form-data">
                     <div class="card-body">
                         <input type="hidden" name="id" value="<?php echo $record['id']; ?>">
+                        <input type="hidden" name="current_doc" value="<?php echo htmlspecialchars($current_doc); ?>">
                         <div class="form-group">
                             <label class="req">No Compra:</label>
                             <input class="form-control" type="text" name="no_compra" value="<?php echo htmlspecialchars($record['no_compra']); ?>" required>
@@ -184,8 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="form-group">
                             <label class="req">PDF:</label>
-                            <b><a href="<?php echo htmlspecialchars($record['pdf']); ?>"><i style="color: #00A9E0; width:20px; height: 20px;" class="fa fa-file-pdf-o"></i>Archivo existente</a></b> <br>
-                            <input type="file" name="pdf" class="form-control" required>
+                            <b><a href="uploads/<?php echo urlencode($record['pdf']); ?>" target="_blank"><i style="color: #00A9E0; width:20px; height: 20px;" class="fa fa-file-pdf-o"></i>Archivo existente</a></b> <br>
+                            <p>Si agrega un archivo en el siguiente campo, reemplazará el archivo existente.</p>
+                            <input type="file" class="form-control" id="pdf" name="pdf">
                         </div>
                     </div>
                     <div style="padding-top: 20px; padding-bottom: 20px;;" class="card-footer">
@@ -206,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 popup.classList.add('show');
                 setTimeout(() => {
                     popup.classList.remove('show');
-                    history.go(-2);
+                    //history.go(-2);
                 }, 2000); // Ocultar después de 30 segundos
             }
         });

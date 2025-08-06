@@ -9,7 +9,7 @@
 session_start(); // Inicia la sesión para poder acceder a $_SESSION
 
 // Verifica si el usuario está logueado
-$logueado = isset($_SESSION['usuario']);
+$logueado = isset($_SESSION['user']);
 
 $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
 
@@ -190,7 +190,7 @@ if ($result === false) {
                                             <td>B/. <?php  echo htmlspecialchars($p_monto); ?></td>
                                             <td><?php echo htmlspecialchars($fecha_pub); ?></td>
                                             <td>
-                                                <a href="http://localhost/compras2/dist/orden-compra/uploads/<?php echo urlencode($row['pdf']); ?>" target="_blank"><i class="fas fa-eye"></i></a>
+                                                <a href="http://localhost/compras2/dist/orden-compra/uploads/<?php echo urlencode($row['pdf']); ?>" target="_blank" class="btn btn-sm"><i class="fas fa-eye"></i></a>
                                                 <?php if ($logueado): ?>
                                                     <a style="background-color: #002F6C;" href="editar.php?id=<?php echo $row['id']; ?>" class="btn btn-sm">
                                                         <i class="fas fa-edit"></i>

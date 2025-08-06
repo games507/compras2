@@ -11,9 +11,9 @@ $user_login = 'asantana'; // Cambia por el nombre de usuario
 $password = '12345qwaszx**'; // Cambia por la contraseña en texto plano
 
 // Encripta la contraseña antes de guardarla
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+$hashed_password = md5($password);
 
-$sql = "INSERT INTO wp_users (user_login, user_pass) VALUES (?, ?)";
+$sql = "INSERT INTO user_compra (user, pass) VALUES (?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $user_login, $hashed_password);
 
