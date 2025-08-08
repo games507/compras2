@@ -157,7 +157,7 @@
                                 </div>
                                 <!-- Modal creación de usuario -->
                                 <div class="modal fade" id="modalCreateUser" tabindex="-1" aria-labelledby="modalCreateUserLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
+                                    <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <form method="POST" action="create_user.php">
                                                 <div class="modal-header">
