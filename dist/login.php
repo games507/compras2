@@ -1,3 +1,9 @@
+<script>
+    function abrirModalPass(user){
+        const userInput = document.getElementById('user_modal_login');
+        userInput.value = user;
+    }
+</script>
 <?php
 // Luis Robles A. Desarrollador
 // Municipio de San Miguelito
@@ -12,9 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_pass = trim($_POST['user_pass']);
 
     if (!empty($user_login) && !empty($user_pass)) {
-        $sql_temp = "SELECT * FROM user_temp WHERE user = ? AND estado = 0";
+        $sql_temp = "SELECT * FROM user_temp WHERE user = ? AND universal_pass = ? AND estado = 0";
         $stmt_temp = $conn->prepare($sql_temp);
-        $stmt_temp->bind_param("s", $user_login);
+        $stmt_temp->bind_param("ss", $user_login, $user_pass);
         $stmt_temp->execute();
         $pre_search = $stmt_temp->get_result();
 
@@ -59,9 +65,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $error_message = "Error en la consulta.";
             }
-        } else {
-            echo("<script></script>");
-        }
+        } else {?>  
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    document.getElementById('user_modal_login').value = '<?php echo htmlspecialchars($user_login); ?>';
+                    const modal = new bootstrap.Modal(document.getElementById('modalCambiarPass'));
+                    modal.show();
+                });
+            </script>
+        <?php }
     } else {
         $error_message = "Por favor, complete todos los campos.";
     }
@@ -81,6 +93,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 </head>
 <body class="login-page-pc">
 <div class="login-box" style="border-radius: 30px;">
@@ -115,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+                        <button type="submit" class="btn btn-primary btn-block button-sbmt">Iniciar sesión</button>
                     </div>
                 </div>
             </form>
@@ -127,7 +144,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
+    <!-- Modal cambio de contraseña -->
+    <div class="modal fade" id="modalCambiarPass" tabindex="-1" aria-labelledby="modalCambiarPassLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="actualizar_pass.php">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCambiarPassLabel">Nueva Contraseña</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <input type="hidden" name="user" id="user_modal_login">
+                            <div class="form-group">
+                                <label class="req" for="nombre">Ingrese una nueva contraseña</label>
+                                <input type="password" class="form-control" name="new_pass" id="new_pass" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="apellido">Repita la contraseña</label>
+                                <input type="password" class="form-control" name="seg_pass" id="seg_pass" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" style="background-color: #009639; color: white;" class="btn" id="btn_up_pass" disabled>Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 <!-- AdminLTE Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const newPass = document.getElementById("new_pass");
+        const repeatPass = document.getElementById("seg_pass");
+        const submitBtn = document.getElementById("btn_up_pass");
+
+        function validarPasswords() {
+            if (newPass.value && repeatPass.value && newPass.value === repeatPass.value) {
+                submitBtn.disabled = false;
+                repeatPass.classList.remove("is-invalid");
+                repeatPass.classList.add("is-valid");
+            } else {
+                submitBtn.disabled = true;
+                repeatPass.classList.remove("is-valid");
+                repeatPass.classList.add("is-invalid");
+            }
+        }
+
+        newPass.addEventListener("input", validarPasswords);
+        repeatPass.addEventListener("input", validarPasswords);
+    });
+</script>
+
 </body>
 </html>

@@ -32,7 +32,6 @@ body{
 
 .login-page-pc {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
@@ -43,12 +42,12 @@ body{
   color: #002F6C;
 }
 
-.login-page-pc button{
+.login-page-pc .button-sbmt{
   background-color: #002F6C;
   border: none;
 }
 
-.login-page-pc button:hover{
+.login-page-pc .button-sbmt:hover{
   background-color: #00A9E0;
   border: none;
 }
