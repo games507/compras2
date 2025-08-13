@@ -130,7 +130,7 @@ if ($result === false) {
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <?php include '..\menu.php';?>
+    <?php include '../menu.php';?>
     <main class="app-main">
         <!-- Content Wrapper -->
         <div class="">

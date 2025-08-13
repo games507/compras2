@@ -79,7 +79,7 @@
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-    <?php include '..\menu.php';?>
+    <?php include '../menu.php';?>
     <main class="app-main" style="padding: 20px;">
         <div id="popupMessage" class="popup-message">
             <?php echo $successMessage; ?>
@@ -563,7 +563,6 @@
                 }
             });
         }
-
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {

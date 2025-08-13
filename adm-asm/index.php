@@ -20,9 +20,17 @@
     $sql = "SELECT * 
         FROM user_compra
         ORDER BY id DESC";
+    $sql_pend = "SELECT *
+                FROM user_temp
+                WHERE estado = 0";
     $result = $conn->query($sql);
+    $result_pend = $conn->query($sql_pend);
 
     if ($result === false) {
+        die("Error en la consulta: " . $conn->error);
+    }
+
+    if ($result_pend === false) {
         die("Error en la consulta: " . $conn->error);
     }
 ?>
@@ -94,7 +102,7 @@
                                             <td><span class="badge-color adjudicado"><?php echo htmlspecialchars($row['rol']); ?></span></td>
                                             <td>
                                                 <a onclick="abrirModalEditUser(<?php echo htmlspecialchars($row['id']); ?>, '<?php echo htmlspecialchars($row['nombre']); ?>', '<?php echo htmlspecialchars($row['apellido']); ?>', '<?php echo htmlspecialchars($row['departamento']); ?>', '<?php echo htmlspecialchars($row['email']); ?>', '<?php echo htmlspecialchars($row['user']); ?>', '<?php echo htmlspecialchars($row['rol']); ?>')" data-bs-toggle="modal" data-bs-target="#modalEditUser" class="btn btn-sm"><i class="fas fa-edit"></i></a>
-                                                <a style="background-color: #FFCD00; color: #002F6C;" href="editar.php?id=<?php echo $row['id']; ?>" class="btn btn-sm">
+                                                <a onclick="resetPass('<?php echo htmlspecialchars($row['iuser']); ?>')" style="background-color: #FFCD00; color: #002F6C;" class="btn btn-sm">
                                                     <i class="bi bi-key-fill"></i>
                                                 </a>
                                                 <a style="background-color: #D50032;" href="tcpdf/reporte.php?id=<?php echo $row['id']; ?>" target="_blank" class="btn btn-sm">
@@ -213,11 +221,72 @@
                     </div>
                 </div>
             </section>
+
+            <section class="content cont-pc">
+                <div class="container-fluid">
+                    <div class="card">
+                        <div class="card-body">
+                        <h4><i class="bi bi-hourglass-split"></i> Usuarios sin activar</h4>
+                            <div class="table-box-pc tb-pc-1">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Contraseña Univelsal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row_pend = $result_pend->fetch_assoc()): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($row_pend['user']); ?></td>
+                                            <td><?php echo htmlspecialchars($row_pend['universal_pass']); ?></td>
+                                        </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="../dist/js/adminlte.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    //-----Modal para reiniciar contraseña
+    function resetPass(user){
+            Swal.fire({
+                title: "¿Estás seguro que deseas reiniciar la contraseña?",
+                text: "¡No podrás revertir esto!",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#D50032",
+                cancelButtonColor: "#777777",
+                confirmButtonText: "Sí, eliminar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // AJAX para eliminar el proponente
+                    $.ajax({
+                        url: 'reset_pass_user.php',
+                        type: 'POST',
+                        data: {user:user},
+                        success: function(respuesta) {
+                            Swal.fire("¡Contraseña reiniciada!", respuesta, "success");
+                            location.reload();
+                        },
+                        error: function() {
+                            Swal.fire("Error", "No se pudo cambiar contraseña.", "error");
+                        }
+                    });
+                } else {
+                    console.log("Cancelado");
+                }
+            });
+        }
+</script>
 <footer style="padding: 16px; color: #002F6C;">
     <div class="float-right">
         <b>Version</b> 2.0
