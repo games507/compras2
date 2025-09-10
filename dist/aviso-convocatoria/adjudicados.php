@@ -45,6 +45,7 @@ $total_paginas = ceil($total_registros / $registros_por_pagina);
 $sql = "SELECT no_compra, descripcion, fecha_publicacion, estado 
         FROM wp_portalcompra 
         $where
+        ORDER BY fecha_publicacion DESC
         LIMIT $offset, $registros_por_pagina";
 $result = $conn->query($sql);
 

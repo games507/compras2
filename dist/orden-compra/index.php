@@ -155,7 +155,7 @@ if ($result === false) {
                                     </div>
                                     <?php if ($logueado): ?>
                                     <div class="col-md-auto">
-                                    <a class="btn btn-search-pc w-100" type="button" href="formulario_compra.html"><i class="fa-solid fa-square-plus"></i> Agregar</a>
+                                    <a class="btn btn-search-pc w-100" type="button" href="formulario_compra.php"><i class="fa-solid fa-square-plus"></i> Agregar</a>
                                     </div>
                                     <?php endif; ?>
                                 </div>

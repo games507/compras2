@@ -308,7 +308,6 @@ include 'conexion.php'; // Incluir el archivo de conexión
                     <div class="app-content"> <!--Contenedor del Dashboard-->
                         <div class="container-fluid"> <!--Inicia Fila-->
                             <div class="row"> <!--Inicia Columna-->
-
                                 <div class="col-lg-3 col-6"> <!--Grid Total-->
                                     <div class="small-box text-bg-primary">
                                         <div class="inner">
@@ -322,10 +321,10 @@ include 'conexion.php'; // Incluir el archivo de conexión
                                             Ver órdenes de compra<i class="bi bi-link-45deg"></i> </a>
                                     </div>
                                 </div>
-                    <!--L4-->
-                </div> <!--L3-->
-            </div> <!--L2-->
-        </div> <!--L1-->
+                                <!--L4-->
+                            </div> <!--L3-->
+                        </div> <!--L2-->
+                    </div> <!--L1-->
     </main>
     <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

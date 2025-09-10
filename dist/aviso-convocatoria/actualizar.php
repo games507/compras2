@@ -110,6 +110,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const popup = document.getElementById('popupMessage');
+            var filas = document.querySelectorAll('.row-color');
             if (popup.textContent.trim() !== "") {
                 popup.classList.add('show');
                 setTimeout(() => {
@@ -117,5 +118,11 @@
                     history.go(-2);
                 }, 2000); // Ocultar después de 30 segundos
             }
+
+            filas.forEach(function(fila) {
+                if (fila.textContent.includes('Si')){
+                fila.classList.add('active-adj');
+                }
+            });
         });
     </script>

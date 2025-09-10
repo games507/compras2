@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "Error al agregar usuario: " . $stmt_user->error;
     }
-    //header("Location: index.php");
-    //exit();
+    header("Location: index.php");
+    exit();
 }
 ?>

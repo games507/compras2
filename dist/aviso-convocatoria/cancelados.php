@@ -29,7 +29,7 @@ $offset = ($pagina_actual - 1) * $registros_por_pagina;
 
 // Condición para la búsqueda
 // Ajuste aquí para que filtre solo los registros donde el estado sea 'adjudicado'
-$where = !empty($busqueda) ? "WHERE (descripcion LIKE '%$busqueda%' OR no_compra LIKE '%$busqueda%') AND estado = 'cancelado'" : "WHERE estado = 'cancelado'";
+$where = !empty($busqueda) ? "WHERE (descripcion LIKE '%$busqueda%' OR no_compra LIKE '%$busqueda%') AND (estado = 'cancelado' OR estado = 'desierto'" : "WHERE estado = 'cancelado' OR estado = 'desierto'";
 
 // Contar el número total de registros
 $sql_total = "SELECT COUNT(*) as total FROM wp_portalcompra $where";
@@ -46,6 +46,7 @@ $total_paginas = ceil($total_registros / $registros_por_pagina);
 $sql = "SELECT no_compra, descripcion, fecha_publicacion, estado 
         FROM wp_portalcompra 
         $where
+        ORDER BY fecha_publicacion DESC
         LIMIT $offset, $registros_por_pagina";
 $result = $conn->query($sql);
 

@@ -566,6 +566,7 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
+            var elementos = document.querySelectorAll('.badge-color');
             var filas = document.querySelectorAll('.row-color');
             var activeTab = localStorage.getItem('activeTab');
             const popup = document.getElementById('popupMessage');
@@ -577,11 +578,20 @@
                 localStorage.setItem('activeTab', $(e.target).attr('data-bs-target'));
             });
 
+            elementos.forEach(function(elemento) {
+                if (elemento.textContent.includes('Adjudicado')||elemento.textContent.includes('Si')){
+                elemento.classList.add('adjudicado');
+                }else{
+                elemento.classList.add("cancelado-desierto");
+                }
+            });
+
             filas.forEach(function(fila) {
                 if (fila.textContent.includes('Si')){
                 fila.classList.add('active-adj');
                 }
             });
+
             if (popup.textContent.trim() !== "") {
                 popup.classList.add('show');
                 setTimeout(() => {

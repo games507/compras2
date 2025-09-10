@@ -1,9 +1,3 @@
-<script>
-    function abrirModalPass(user){
-        const userInput = document.getElementById('user_modal_login');
-        userInput.value = user;
-    }
-</script>
 <?php
 // Luis Robles A. Desarrollador
 // Municipio de San Miguelito
@@ -11,6 +5,11 @@
 // Creditos Anthony Santana Desarrollador
 // Supervisado por Dir. Joseph Arosemena
 include 'conexion.php';
+
+if (isset($_SESSION['mensaje_log'])) {
+    echo "<script>alert('{$_SESSION['mensaje_adm']}');</script>";
+    unset($_SESSION['mensaje_log']); // Elimina el mensaje para que no se repita
+}
 
 // Verificar si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -36,6 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $usuario = $search->fetch_assoc();
                     $hashed_password_input = md5($user_pass);
                     $result = mysqli_query($conn, "SELECT * FROM user_compra WHERE user = '$user_login' AND pass = '$hashed_password_input'");
+                    //echo($user_pass);
+                    //echo($hashed_password_input);
+                    //echo($result);
                     if (mysqli_num_rows($result) > 0) {
                         session_start();
                         $_SESSION['user'] = $user_login;

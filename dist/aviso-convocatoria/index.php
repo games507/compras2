@@ -47,7 +47,7 @@ $total_paginas = ceil($total_registros / $registros_por_pagina);
 $sql = "SELECT id, no_compra, descripcion, fecha_publicacion, estado 
         FROM wp_portalcompra
         $where 
-        ORDER BY no_compra DESC
+        ORDER BY fecha_publicacion DESC
         LIMIT $offset, $registros_por_pagina";
 $result = $conn->query($sql);
 
@@ -154,7 +154,7 @@ if ($result === false) {
                                     </div>
                                     <?php if ($logueado): ?>
                                     <div class="col-md-auto">
-                                        <a class="btn btn-search-pc w-100" type="button" href="formulario_compra.html"><i class="fa-solid fa-square-plus"></i> Agregar</a>
+                                        <a class="btn btn-search-pc w-100" type="button" href="formulario_compra.php"><i class="fa-solid fa-square-plus"></i> Agregar</a>
                                     </div>
                                     <?php endif; ?>
                                 </div>

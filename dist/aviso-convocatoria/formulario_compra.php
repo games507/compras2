@@ -1,98 +1,206 @@
 <?php
-// Luis Robles A. Desarrollador
-// Municipio de San Miguelito
-// Portal de Compra Noviembre 2024
-// Creditos Anthony Santana Desarrollador
-// Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
-// Supervisado por Dir. Joseph Arosemena
+session_start(); // Inicia la sesión para poder acceder a $_SESSION
 
-// Iniciar sesión para acceder al usuario logueado
-session_start();
-header('Content-Type: text/html; charset=utf-8');
-
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    header('Location: login.php'); // Redirige al login si no está autenticado
-    exit();
-}
-
-// Usuario logueado
-$usuario_registrado = $_SESSION['usuario'];
-
-// Conexión a la base de datos
-include 'conexion.php';
-
-
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  	$pdo->exec("SET NAMES utf8mb4"); // Forzamos la codificación UTF-8 auct. 20_2_25
-}catch (PDOException $e) {
-    die("(catch)Error de conexión: " . $e->getMessage());
-}
-
-// Captura los datos enviados por el formulario
-//$id = $_POST['id'] ?? null;
-$no_compra = $_POST['no_compra'] ?? null;
-$tipo_procedimiento = $_POST['tipo_procedimiento'] ?? null;
-$objeto_contractual = $_POST['objeto_contractual'] ?? null;
-$descripcion = $_POST['descripcion'] ?? null;
-$fecha_publicacion = $_POST['fecha_publicacion'] ?? null;
-$fecha_presentacion = $_POST['fecha_presentacion'] ?? null;
-$fecha_apertura = $_POST['fecha_apertura'] ?? null;
-$lugar_presentacion = $_POST['lugar_presentacion'] ?? null;
-$termino_subsanacion = $_POST['termino_subsanacion'] ?? null;
-$precio_referencia = $_POST['precio_referencia'] ?? null;
-$estado = $_POST['estado'] ?? null;
-$partida_presupuestaria = $_POST['partida_presupuestaria'] ?? null;
-$modalidad_adjudicacion = $_POST['modalidad_adjudicacion'] ?? null;
-$provincia_entrega = $_POST['provincia_entrega'] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // Consulta SQL para insertar los datos en wp_portalcompra
-        $sql = "INSERT INTO wp_portalcompra (
-                    no_compra, tipo_procedimiento, objeto_contractual, descripcion, 
-                    fecha_publicacion, fecha_presentacion, fecha_apertura, lugar_presentacion, 
-                    termino_subsanacion, precio_referencia, estado, partida_presupuestaria, 
-                    modalidad_adjudicacion, provincia_entrega, usuario_registrado
-                ) VALUES (
-                    :no_compra, :tipo_procedimiento, :objeto_contractual, :descripcion, 
-                    :fecha_publicacion, :fecha_presentacion, :fecha_apertura, :lugar_presentacion, 
-                    :termino_subsanacion, :precio_referencia, :estado, :partida_presupuestaria, 
-                    :modalidad_adjudicacion, :provincia_entrega, :usuario_registrado
-                )";
-        $stmt = $pdo->prepare($sql);
-
-        // Ejecutar la consulta con los parámetros
-        $stmt->execute([
-            ':no_compra' => $no_compra,
-            ':tipo_procedimiento' => $tipo_procedimiento,
-            ':objeto_contractual' => $objeto_contractual,
-            ':descripcion' => $descripcion,
-            ':fecha_publicacion' => $fecha_publicacion,
-            ':fecha_presentacion' => $fecha_presentacion,
-            ':fecha_apertura' => $fecha_apertura,
-            ':lugar_presentacion' => $lugar_presentacion,
-            ':termino_subsanacion' => $termino_subsanacion,
-            ':precio_referencia' => $precio_referencia,
-            ':estado' => $estado,
-            ':partida_presupuestaria' => $partida_presupuestaria,
-            ':modalidad_adjudicacion' => $modalidad_adjudicacion,
-            ':provincia_entrega' => $provincia_entrega,
-            ':usuario_registrado' => $usuario_registrado,
-        ]);
-
-        // Obtener el ID de la compra insertada
-        $id_pcompra = $pdo->lastInsertId();
-
-        // Redirigir al formulario de documentos con el ID de la compra
-        header("Location: form/index.php?id_pcompra=$id_pcompra");
-        exit();
-
-    } catch (PDOException $e) {
-        // Mostrar el error
-        echo "Error al guardar el registro: " . $e->getMessage();
-    }
-}
+// Verifica si el usuario está logueado
+$logueado = isset($_SESSION['user']);
+$_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <!--Datos de la pestaña del navegador-->
+    <title>Registrar Compra | Portal de Compras</title>
+    <link rel="shortcut icon" href="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/cropped-Escudo-AlcaldiaSanMiguelito-RGB_Vertical-Blanco.png" />
+    <!-- CSS de AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Portal de Compras | Alcaldía de San Miguelito">
+    <meta name="author" content="Alcaldía de San Miguelito">
+    <meta name="description" content="Portal de Compras de la Alcaldía de San Miguelito. Creado con el objetivo de ser transparente con nuestros vecinos y brindar información inmediata a nuestros proveedores.">
+    <meta name="keywords" content="portal de compras, alcaldia de san miguelito, municipio de san miguelito"><!--end::Primary Meta Tags--><!--begin::Fonts-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous"><!--end::Fonts--><!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" integrity="sha256-dSokZseQNT08wYEWiz5iLI8QPlKxG+TswNRD8k35cpg=" crossorigin="anonymous"><!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous"><!--end::Third Party Plugin(Bootstrap Icons)--><!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="../../dist/css/adminlte.css"><!--end::Required Plugin(AdminLTE)--><!-- apexcharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous"><!-- jsvectormap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous">
+    <!-- Archivo CSS personalizado -->
+    <link rel="stylesheet" href="..\css\estilos-pc-asm.scss">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    /* Cambiar el fondo de la barra lateral a #002d69 */
+    .main-sidebar {
+        background-color: #002F6C !important;
+    }
+
+    /* Cambiar las letras de los enlaces de la barra lateral a blanco */
+    .main-sidebar .nav-link {
+        color: white !important;
+        border-radius: 10px;
+    }
+
+    /* Cambiar el color de los íconos a blanco */
+    .main-sidebar .nav-icon {
+        color: white !important;
+    }
+
+    /* Cambiar el color de los íconos cuando se pasa el mouse */
+    .main-sidebar .nav-link:hover .nav-icon {
+        color: #00A9E0 !important;  /* Puedes cambiar el color de los íconos en hover si lo deseas */
+    }
+
+    /* Cambiar el color de los enlaces cuando se pasa el mouse */
+    .active, .main-sidebar .nav-link:hover {
+        background-color: #001f4d !important; /* Puedes cambiar el fondo en hover si lo deseas */
+        color: #00A9E0 !important;  /* Cambiar el color del texto al pasar el mouse */
+        border-radius: 10px;
+    }
+
+    .req:after{
+        content: '*';
+        color: red;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-H2VM7BKda+v2Z4+DRy69uknwxjyDRhszjXFhsL4gD3w=" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha256-whL0tQWoY1Ku1iskqPFvmZ+CHsvmRWx/PIoEvIeWh4I=" crossorigin="anonymous"></script> <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha256-YMa+wAM6QkVyz999odX7lPRxkoYAan8suedu4k2Zur8=" crossorigin="anonymous"></script> <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+<script src="../../dist/js/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+<script>
+    const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+    const Default = {
+        scrollbarTheme: "os-theme-light",
+        scrollbarAutoHide: "leave",
+        scrollbarClickScroll: true,
+    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (
+            sidebarWrapper &&
+            typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+        ) {
+            OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                scrollbars: {
+                    theme: Default.scrollbarTheme,
+                    autoHide: Default.scrollbarAutoHide,
+                    clickScroll: Default.scrollbarClickScroll,
+                },
+            });
+        }
+    });
+</script> <!--end::OverlayScrollbars Configure--> <!-- OPTIONAL SCRIPTS --> <!-- sortablejs -->
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <?php include '../menu.php';?>
+    <!-- Content Wrapper -->
+    <main class="app-main">
+    <div class="">
+        <section>
+            <div class="title-table-pc container-fluid text-center">
+                <h2><b>Registrar Compra</b></h2>
+            </div>
+        </section>
+        <!-- Main Content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card card-primary">
+                    <div class="card-header" style="padding-left: 10px !important;">
+                        <h5 style="color: #002F6C; font-weight: bold !important;">Formulario de Registro</h5>
+                    </div>
+                    <form method="POST" action="formulario_compra.php">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="req" for="no_compra">Número de Compra</label>
+                                <input type="text" class="form-control" id="no_compra" name="no_compra" placeholder="Ingrese el número de compra" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="tipo_procedimiento">Tipo de Procedimiento</label>
+                                <input type="text" class="form-control" id="tipo_procedimiento" name="tipo_procedimiento" placeholder="Ingrese el tipo de procedimiento" value="CONTRATACIÓN QUE SUPERAN LOS DIEZ MIL BALBOAS (B/. 10,000.00) SIN EXCEDER LOS CINCUENTA MIL BALBOAS (B/. 50,000.00)" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="objeto_contractual">Objeto Contractual</label>
+                                <input type="text" class="form-control" id="objeto_contractual" name="objeto_contractual" placeholder="Ingrese el objeto contractual" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="descripcion">Descripción</label>
+                                <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Ingrese una descripción" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="fecha_publicacion">Fecha de Publicación</label>
+                                <input type="date" class="form-control" id="fecha_publicacion" name="fecha_publicacion" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="tipo_procedimiento">Fecha de Presentación</label>
+                                <input type="datetime-local" class="form-control" id="fecha_presentacion" name="fecha_presentacion"  required>
+                            </div>
+                                        <div class="form-group">
+                                <label class="req" for="fecha_apertura">Fecha de Apertura</label>
+                                <input type="datetime-local" class="form-control" id="fecha_apertura" name="fecha_apertura" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="lugar_presentacion">Lugar de Presentación</label>
+                                <input type="text" class="form-control" id="lugar_presentacion" name="lugar_presentacion" placeholder="Ingrese el lugar de presentación" value="DEPARTAMENTO DE COMPRAS, MUNICIPIO DE SAN MIGUELITO, CALLE PRINCIPAL DE FÁTIMA AMELIA DENIS DE ICAZA." required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="termino_subsanacion">Término de Subsanación</label>
+                                <input type="text" class="form-control" id="termino_subsanacion" name="termino_subsanacion" placeholder="Ingrese el término de subsanación" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="precio_referencia">Precio de Referencia</label>
+                                <input type="number" step="0.01" min="10000" max="50000" class="form-control" oninput="limitDecimals(this)" id="precio_referencia" name="precio_referencia" value="0.00" placeholder="Ingrese el precio de referencia" required>
+                                <script>
+                                    function limitDecimals(input) {
+                                        var value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            input.value = value.toFixed(2);
+                                        }
+                                    }
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="partida_presupuestaria">Partida Presupuestaria</label>
+                                <input type="text" class="form-control" id="partida_presupuestaria" name="partida_presupuestaria" placeholder="Ingrese la partida presupuestaria" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="modalidad_adjudicacion">Modalidad de Adjudicación</label>
+                                <input type="text" class="form-control" id="modalidad_adjudicacion" name="modalidad_adjudicacion" placeholder="Ingrese la modalidad de adjudicación" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="provincia_entrega">Provincia de Entrega</label>
+                                <input type="text" class="form-control" id="provincia_entrega" name="provincia_entrega" placeholder="Ingrese la provincia de entrega" value="Panamá, Distrito San Miguelito" required>
+                            </div>
+                            
+                            
+                            
+                            <div class="form-group">
+                                <label class="req" for="estado">Estado</label>
+                                <select class="form-control" id="estado" name="estado" required>
+                                    <option value="Vigente">Vigente</option>                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div style="padding-top: 20px; padding-bottom: 20px;;" class="card-footer">
+                            <button style="color: white; background-color: #009639" type="submit" class="btn"><i class="fas fa-save"></i> Registrar Compra</button>
+                            <a style="color: white; background-color: #D50032" onClick="javascript:history.go(-1)" class="btn"><i class="fas fa-arrow-left"></i> Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS de AdminLTE -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+</body>
+</html>

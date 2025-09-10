@@ -1,60 +1,166 @@
 <?php
-// Luis Robles A. Desarrollador
-// Municipio de San Miguelito
-// Portal de Compra Noviembre 2024
-// Creditos Anthony Santana Desarrollador
-// Este archivo fue creado como parte del proyecto [Nombre del Proyecto]
-// Supervisado por Dir. Joseph Arosemena
-
-// Iniciar sesión para acceder al usuario logueado
 session_start();
-header('Content-Type: text/html; charset=utf-8');
-
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['usuario'])) {
-    header('Location: ../login.php'); // Redirige al login si no está autenticado
-    exit();
-}
-
-// Usuario logueado
-$usuario_registrado = $_SESSION['usuario'];
-
-// Conexión a la base de datos
-include '../conexion.php';
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Captura los datos enviados por el formulario
-    $no_compra = $_POST['no_compra'] ?? null;
-    $descripcion = $_POST['descripcion'] ?? null;
-    $proveedor = $_POST['proveedor'] ?? null;
-    $monto = $_POST['monto'] ?? null;
-    $f_publicacion = $_POST['f_publicacion'] ?? null;
-    $pdf = $_POST['pdf'] ?? null;
-
-    $targetDir = "uploads/";
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0777, true); // Crea la carpeta si no existe
-    }
-
-    // Consulta SQL para insertar los datos en wp_portalcompra
-    $stmt = $conn->prepare("INSERT INTO orden_compra (no_compra, descripcion, proveedor, monto, f_publicacion, pdf) VALUES (?, ?, ?, ?, ?, ?)");
-    
-    $pdfName = basename($_FILES['pdf']['name']); // Obtener el nombre del archivo
-    $targetFilePath = $targetDir . $pdfName; // Ruta completa del archivo
-    move_uploaded_file($_FILES['pdf']['tmp_name'], $targetFilePath);
-
-    // Ahora insertamos el registro en la base de datos con la ruta del archivo
-    $stmt->bind_param('ssss', $no_compra, $descripcion, $proveedor, $monto, $f_publicacion, $pdfName);
-    // Ejecutar la consulta y verificar si fue exitosa
-    if ($stmt->execute()) {
-        echo "Documento " . $item['nombre'] . " guardado correctamente.<br>";
-    } else {
-        echo "Error al guardar el documento " . $item['nombre'] . ".<br>";
-    }
-
-    // Redirigir al formulario de documentos con el ID de la compra
-    header("Location: index.php");
-    exit();
-}
+$logueado = isset($_SESSION['user']);
+$_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <!--Datos de la pestaña del navegador-->
+    <title>Registrar Compra | Portal de Compras</title>
+    <link rel="shortcut icon" href="https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/10/cropped-Escudo-AlcaldiaSanMiguelito-RGB_Vertical-Blanco.png" />
+    <!-- CSS de AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="Portal de Compras | Alcaldía de San Miguelito">
+    <meta name="author" content="Alcaldía de San Miguelito">
+    <meta name="description" content="Portal de Compras de la Alcaldía de San Miguelito. Creado con el objetivo de ser transparente con nuestros vecinos y brindar información inmediata a nuestros proveedores.">
+    <meta name="keywords" content="portal de compras, alcaldia de san miguelito, municipio de san miguelito"><!--end::Primary Meta Tags--><!--begin::Fonts-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous"><!--end::Fonts--><!--begin::Third Party Plugin(OverlayScrollbars)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" integrity="sha256-dSokZseQNT08wYEWiz5iLI8QPlKxG+TswNRD8k35cpg=" crossorigin="anonymous"><!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Third Party Plugin(Bootstrap Icons)-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" integrity="sha256-Qsx5lrStHZyR9REqhUF8iQt73X06c8LGIUPzpOhwRrI=" crossorigin="anonymous"><!--end::Third Party Plugin(Bootstrap Icons)--><!--begin::Required Plugin(AdminLTE)-->
+    <link rel="stylesheet" href="../../dist/css/adminlte.css"><!--end::Required Plugin(AdminLTE)--><!-- apexcharts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css" integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous"><!-- jsvectormap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css" integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous">
+    <!-- Archivo CSS personalizado -->
+    <link rel="stylesheet" href="..\css\estilos-pc-asm.scss">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<style>
+    /* Cambiar el fondo de la barra lateral a #002d69 */
+    .main-sidebar {
+        background-color: #002F6C !important;
+    }
+
+    /* Cambiar las letras de los enlaces de la barra lateral a blanco */
+    .main-sidebar .nav-link {
+        color: white !important;
+        border-radius: 10px;
+    }
+
+    /* Cambiar el color de los íconos a blanco */
+    .main-sidebar .nav-icon {
+        color: white !important;
+    }
+
+    /* Cambiar el color de los íconos cuando se pasa el mouse */
+    .main-sidebar .nav-link:hover .nav-icon {
+        color: #00A9E0 !important;  /* Puedes cambiar el color de los íconos en hover si lo deseas */
+    }
+
+    /* Cambiar el color de los enlaces cuando se pasa el mouse */
+    .active, .main-sidebar .nav-link:hover {
+        background-color: #001f4d !important; /* Puedes cambiar el fondo en hover si lo deseas */
+        color: #00A9E0 !important;  /* Cambiar el color del texto al pasar el mouse */
+        border-radius: 10px;
+    }
+
+    .req:after{
+        content: '*';
+        color: red;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" integrity="sha256-H2VM7BKda+v2Z4+DRy69uknwxjyDRhszjXFhsL4gD3w=" crossorigin="anonymous"></script> <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha256-whL0tQWoY1Ku1iskqPFvmZ+CHsvmRWx/PIoEvIeWh4I=" crossorigin="anonymous"></script> <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha256-YMa+wAM6QkVyz999odX7lPRxkoYAan8suedu4k2Zur8=" crossorigin="anonymous"></script> <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
+<script src="../../dist/js/adminlte.js"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+
+<script>
+    const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+    const Default = {
+        scrollbarTheme: "os-theme-light",
+        scrollbarAutoHide: "leave",
+        scrollbarClickScroll: true,
+    };
+    document.addEventListener("DOMContentLoaded", function() {
+        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+        if (
+            sidebarWrapper &&
+            typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+        ) {
+            OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                scrollbars: {
+                    theme: Default.scrollbarTheme,
+                    autoHide: Default.scrollbarAutoHide,
+                    clickScroll: Default.scrollbarClickScroll,
+                },
+            });
+        }
+    });
+</script> <!--end::OverlayScrollbars Configure--> <!-- OPTIONAL SCRIPTS --> <!-- sortablejs -->
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <?php include '../menu.php';?>
+
+    <!-- Content Wrapper -->
+    <main class="app-main">
+    <div class="">
+        <section>
+            <div class="title-table-pc container-fluid text-center">
+                <h2><b>Orden de Compra</b></h2>
+            </div>
+        </section>
+        <!-- Main Content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card card-primary">
+                    <div class="card-header" style="padding-left: 10px !important;">
+                        <h5 style="color: #002F6C; font-weight: bold !important;">Agregar nueva Orden de Compra</h5>
+                    </div>
+                    <form method="POST" action="formulario_compra.php">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="req" for="no_compra">No. de Orden de Compra</label>
+                                <input type="text" class="form-control" id="no_compra" name="no_compra" placeholder="Ingrese el número de compra" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="descripcion">Descripción</label>
+                                <input type="text" class="form-control" id="descripcion" name="descripcion" placeholder="Describa el objeto de compra" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="proveedor">Proveedor</label>
+                                <input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Ingrese el nombre del proveedor" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="monto">Monto</label>
+                                <input type="number" step="0.01" min="1" max="10000" class="form-control" oninput="limitDecimals(this)" id="monto" name="monto" value="0.00" placeholder="Ingrese el precio de referencia" required>
+                                <script>
+                                    function limitDecimals(input) {
+                                        var value = parseFloat(input.value);
+                                        if (!isNaN(value)) {
+                                            input.value = value.toFixed(2);
+                                        }
+                                    }
+                                </script>
+                            </div>
+                            <div class="form-group">
+                                <label class="req" for="f_publicacion">Fecha de Publicación</label>
+                                <input type="date" class="form-control" id="f_publicacion" name="f_publicacion" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="req" for="pdf">Seleccionar archivo PDF</label>
+                                <input type="file" class="form-control" id="pdf" name="pdf" required>
+                            </div>
+                        </div>
+                        <div style="padding-top: 20px; padding-bottom: 20px;;" class="card-footer">
+                            <button style="color: white; background-color: #009639" type="submit" class="btn"><i class="fas fa-save"></i> Registrar Orden de Compra</button>
+                            <a style="color: white; background-color: #D50032" onClick="javascript:history.go(-1)" class="btn"><i class="fas fa-arrow-left"></i> Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS de AdminLTE -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+</body>
+</html>

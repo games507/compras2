@@ -31,10 +31,11 @@ body{
 }
 
 .login-page-pc {
+  flex-direction: column;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 100vh !important;
   background-image: url("https://alcaldiasanmiguelito.gob.pa/wp-content/uploads/2024/12/ASM-TYS-Login_Pantalla-inicio-1920x1080-1.jpg") !important;
 }
 
@@ -374,7 +375,8 @@ body{
   padding: 30px;
   margin-right: auto;
   margin-left: auto;
-  width: 100%;
+  max-width: 100% !important;
+  width: 100% !important;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   text-align: center;
@@ -423,9 +425,19 @@ body{
 	color: white !important;
 }
 
-.cancelado-desierto {
+.cancelado-desierto, .admin-color {
 	background-color: #ccc !important;
 	color: #7A7A7A !important;
+}
+
+.supervisor-color{
+  background-color: #5F259F !important;
+  color: white !important;
+}
+
+.analista-color{
+  background-color: #0047BB !important;
+  color: white !important;
 }
 
 .active-menu {
@@ -439,8 +451,8 @@ body{
 .nav-sidebar {
   .nav-item {
     > .nav-link {
-      margin-bottom: 0px !important;
-      margin-top: 5px !important;
+      margin-bottom: 3px !important;
+      margin-top: 3px !important;
     }
   }
 }

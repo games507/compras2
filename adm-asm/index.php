@@ -6,7 +6,12 @@
         header("Location: ../dist/login.php");
         exit;
     }else{
-        $logueado = isset($_SESSION['user']);
+        if($_SESSION['rol'] and $_SESSION['rol'] == "Super User" or $_SESSION['rol'] == "Admin"){
+            $logueado = isset($_SESSION['user']);
+        }else{
+            header("Location: ../dist");
+        exit;
+        }
     }
     $show_submenu = isset($_SESSION['show_submenu']);
     $_SESSION['previous_page'] = $_SERVER['REQUEST_URI'];
@@ -16,10 +21,17 @@
         echo "<script>alert('{$_SESSION['mensaje_adm']}');</script>";
         unset($_SESSION['mensaje_adm']); // Elimina el mensaje para que no se repita
     }
-
-    $sql = "SELECT * 
+    if (isset($_SESSION['rol']) and $_SESSION['rol'] == "Super User"){
+        $sql = "SELECT * 
         FROM user_compra
         ORDER BY id DESC";
+    }else{
+        $sql = "SELECT * 
+        FROM user_compra
+        WHERE rol != 'Super User'
+        ORDER BY id DESC";
+    }
+    
     $sql_pend = "SELECT *
                 FROM user_temp
                 WHERE estado = 0";
@@ -71,7 +83,7 @@
 
             <section class="content cont-pc">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card" style="margin-bottom: 25px !important;">
                         <div class="card-body">
                         <button type="button" class="btn" style="background-color: #00A9E0; color: white; margin-bottom: 20px;" data-bs-toggle="modal" data-bs-target="#modalCreateUser"><i class="bi bi-person-fill-add"></i> Agregar usuario</button>
                             <div class="table-box-pc tb-pc-1">
@@ -99,15 +111,17 @@
                                             <td><?php echo htmlspecialchars($f_creacion); ?></td>
                                             <td><?php echo htmlspecialchars($f_modificacion); ?></td>
                                             <td><?php echo htmlspecialchars($row['created_user']); ?></td>
-                                            <td><span class="badge-color adjudicado"><?php echo htmlspecialchars($row['rol']); ?></span></td>
+                                            <td style="text-align: center;"><span class="badge-color"><?php echo htmlspecialchars($row['rol']); ?></span></td>
                                             <td>
                                                 <a onclick="abrirModalEditUser(<?php echo htmlspecialchars($row['id']); ?>, '<?php echo htmlspecialchars($row['nombre']); ?>', '<?php echo htmlspecialchars($row['apellido']); ?>', '<?php echo htmlspecialchars($row['departamento']); ?>', '<?php echo htmlspecialchars($row['email']); ?>', '<?php echo htmlspecialchars($row['user']); ?>', '<?php echo htmlspecialchars($row['rol']); ?>')" data-bs-toggle="modal" data-bs-target="#modalEditUser" class="btn btn-sm"><i class="fas fa-edit"></i></a>
-                                                <a onclick="resetPass('<?php echo htmlspecialchars($row['iuser']); ?>')" style="background-color: #FFCD00; color: #002F6C;" class="btn btn-sm">
+                                                <a onclick="resetPass('<?php echo htmlspecialchars($row['user']); ?>')" style="background-color: #FFCD00; color: #002F6C;" class="btn btn-sm">
                                                     <i class="bi bi-key-fill"></i>
                                                 </a>
-                                                <a style="background-color: #D50032;" href="tcpdf/reporte.php?id=<?php echo $row['id']; ?>" target="_blank" class="btn btn-sm">
+                                                <?php if($_SESSION['rol'] == "Super User"): ?>
+                                                <a onclick="borrarUser('<?php echo htmlspecialchars($row['id']); ?>')" style="background-color: #D50032;" class="btn btn-sm">
                                                     <i class="bi bi-trash3-fill"></i>
                                                 </a>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                         <?php endwhile; ?>
@@ -175,7 +189,7 @@
                                                 <div class="modal-body">
                                                     <div class="card-body">
                                                         <div class="form-group">
-                                                            <label class="req" for="nombre">Usuario</label>
+                                                            <label class="req" for="nombre">Nombre</label>
                                                             <input type="text" class="form-control" name="nombre"required>
                                                         </div>
                                                         <div class="form-group">
@@ -221,12 +235,13 @@
                     </div>
                 </div>
             </section>
-
+            <!--Sección de usuarios sin iniciar contraseña -->
             <section class="content cont-pc">
                 <div class="container-fluid">
-                    <div class="card">
+                    <div class="card" style="margin-bottom: 25px !important;">
                         <div class="card-body">
-                        <h4><i class="bi bi-hourglass-split"></i> Usuarios sin activar</h4>
+                        <h4 style="color: #002F6C;"><i class="bi bi-hourglass-split"></i> Usuarios sin activar</h4>
+                            <?php if ($result_pend && $result_pend->num_rows > 0): ?>
                             <div class="table-box-pc tb-pc-1">
                                 <table>
                                     <thead>
@@ -245,48 +260,82 @@
                                     </tbody>
                                 </table> 
                             </div>
+                            <?php else: ?>
+                                <p>No hay usuarios para mostrar.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
     </main>
-</body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="../dist/js/adminlte.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     //-----Modal para reiniciar contraseña
     function resetPass(user){
-            Swal.fire({
-                title: "¿Estás seguro que deseas reiniciar la contraseña?",
-                text: "¡No podrás revertir esto!",
-                icon: "question",
-                showCancelButton: true,
-                confirmButtonColor: "#D50032",
-                cancelButtonColor: "#777777",
-                confirmButtonText: "Sí, eliminar"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // AJAX para eliminar el proponente
-                    $.ajax({
-                        url: 'reset_pass_user.php',
-                        type: 'POST',
-                        data: {user:user},
-                        success: function(respuesta) {
-                            Swal.fire("¡Contraseña reiniciada!", respuesta, "success");
-                            location.reload();
-                        },
-                        error: function() {
-                            Swal.fire("Error", "No se pudo cambiar contraseña.", "error");
-                        }
-                    });
-                } else {
-                    console.log("Cancelado");
-                }
-            });
-        }
+        Swal.fire({
+            title: "¿Estás seguro que deseas reiniciar la contraseña?",
+            text: "¡No podrás revertir esto!",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#D50032",
+            cancelButtonColor: "#777777",
+            confirmButtonText: "Sí, reiniciar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // AJAX para reiniciar contraseña
+                $.ajax({
+                    url: 'reset_pass_user.php',
+                    type: 'POST',
+                    data: {user:user},
+                    success: function(respuesta) {
+                        Swal.fire("¡Contraseña reiniciada!", respuesta, "success");
+                        location.reload();
+                    },
+                    error: function() {
+                        Swal.fire("Error", "No se pudo cambiar contraseña.", "error");
+                    }
+                });
+            } else {
+                console.log("Cancelado");
+            }
+        });
+    }
+
+    //-----Modal para eliminar usuario
+    function borrarUser(id){
+        Swal.fire({
+            title: "¿Estás seguro que desea eliminar el usuario?",
+            text: "¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#D50032",
+            cancelButtonColor: "#777777",
+            confirmButtonText: "Sí, eliminar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // AJAX para eliminar el usuario
+                $.ajax({
+                    url: 'borrar_user.php',
+                    type: 'POST',
+                    data: {id:id},
+                    success: function(respuesta) {
+                        Swal.fire("¡Usuario eliminado!", respuesta, "success");
+                        location.reload();
+                    },
+                    error: function() {
+                        Swal.fire("Error", "No se pudo eliminar el usuario.", "error");
+                    }
+                });
+            } else {
+                console.log("Cancelado");
+            }
+        });
+    }
 </script>
+</body>
 <footer style="padding: 16px; color: #002F6C;">
     <div class="float-right">
         <b>Version</b> 2.0
@@ -294,6 +343,19 @@
     <strong>© 2025 Portal de Compras.</strong> Todos los derechos reservados.
 </footer>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var elementos = document.querySelectorAll('.badge-color');
+
+        elementos.forEach(function(elemento) {
+            if (elemento.textContent.includes('Admin')||elemento.textContent.includes('Super User')){
+                elemento.classList.add('admin-color');
+            }else if(elemento.textContent.includes('Supervisor')){
+                elemento.classList.add("supervisor-color");
+            }else{
+                elemento.classList.add("analista-color");
+            }
+        });
+    });
     function abrirModalEditUser(id, nombre, apellido, departamento, email, user, rol){
         const idInput = document.getElementById('id_modal_user');
         const nombreInput = document.getElementById('nombre_modal_user');

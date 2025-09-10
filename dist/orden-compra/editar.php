@@ -120,7 +120,7 @@ $current_doc = $record['pdf'];
                         <input type="hidden" name="id" value="<?php echo $record['id']; ?>">
                         <input type="hidden" name="current_doc" value="<?php echo htmlspecialchars($current_doc); ?>">
                         <div class="form-group">
-                            <label class="req">No Compra:</label>
+                            <label class="req">No. de Orden de Compra:</label>
                             <input class="form-control" type="text" name="no_compra" value="<?php echo htmlspecialchars($record['no_compra']); ?>" required>
                         </div>
 

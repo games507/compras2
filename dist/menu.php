@@ -172,7 +172,7 @@
                             <!-- Sidebar -->
                             <div class="sidebar">
                                 <!-- Sidebar Menu -->
-                                <nav class="mt-2">
+                                <nav class="">
                                     <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" style="position: relative;">
                                         <li class="nav-item">
                                             <a href="http://localhost/compras2/dist/index.php" class="nav-link">
@@ -225,7 +225,16 @@
                                                 <p>Orden de Compra</p>
                                             </a>
                                         </li>
-                                        <?php if (isset($_SESSION['rol']) and $_SESSION['rol'] == "Admin"): ?>
+                                        <?php if (isset($_SESSION['rol']) and $_SESSION['rol'] == "Admin" or $_SESSION['rol'] == "Super User" or $_SESSION['rol'] == "Supervisor"): ?>
+                                        <hr/>
+                                        <li class="nav-item">
+                                            <a href="http://localhost/compras2/dist/reporte.php" class="nav-link" style="margin-top: 3.2px;">
+                                                <i class="nav-icon bi bi-pie-chart-fill"></i>
+                                                <p>Reportes</p>
+                                            </a>
+                                        </li>
+                                        <?php endif; ?>
+                                        <?php if (isset($_SESSION['rol']) and $_SESSION['rol'] == "Admin" or $_SESSION['rol'] == "Super User"): ?>
                                         <hr/>
                                         <li class="nav-item">
                                             <a href="http://localhost/compras2/adm-asm/index.php" class="nav-link" style="margin-top: 3.2px;">

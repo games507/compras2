@@ -194,7 +194,7 @@ $proponente_result = $stmt_proponente->get_result();
                             ?>
                             <td><?php echo htmlspecialchars($proponente['proponente']); ?></td>
                             <td>B/. <?php echo htmlspecialchars($p_oferta); ?></td>
-                        <td><span class="badge-color"><?php echo htmlspecialchars($proponente['aprobado']); ?></span></td>
+                            <td><span class="badge-color"><?php echo htmlspecialchars($proponente['aprobado']); ?></span></td>
                             <td><?php echo htmlspecialchars($h_prop); ?></td>
                         </tr>
                     <?php endwhile; ?>
